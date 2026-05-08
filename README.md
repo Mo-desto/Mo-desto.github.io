@@ -1,33 +1,48 @@
-# Mo-desto.github.io
+# 🚀 Mo-desto.github.io
+Modesto Domingo Titirico Mamani
+Repositorio principal del sitio web personal y proyectos digitales de **Mo-desto**.
 
-Repositorio principal del sitio web personal y de proyectos de **Mo-desto**.
+---
 
-## Descripción
+## 📖 Descripción
 
-Este repositorio contiene los archivos y recursos necesarios para el despliegue del sitio web alojado mediante GitHub Pages / Cloudflare Pages.
+Este repositorio contiene los archivos, recursos y estructura base para el despliegue del sitio web utilizando plataformas como:
 
-## Tecnologías
+* 🌐 GitHub Pages
+* ☁️ Cloudflare Pages
+* 🔗 Dominio personalizado
 
-* HTML
-* CSS
-* JavaScript
+---
 
-## Propósito
+## 🛠️ Tecnologías utilizadas
 
-* Presencia web
-* Desarrollo frontend
-* Proyectos personales
-* Expansión de marca digital
-* Estudiando Ingenieria en Sistemas
+* 🌍 HTML5
+* 🎨 CSS3
+* ⚡ JavaScript
 
-## Deploy
+---
 
-El sitio puede implementarse mediante:
+## 🎯 Propósito del proyecto
 
-* GitHub Pages
-* Cloudflare Pages
-* Dominio personalizado
+* 💼 Presencia web profesional
+* 💻 Desarrollo frontend
+* 🧩 Proyectos personales
+* 📈 Expansión de marca digital
 
-## Autor
+---
 
-**Mo-desto**
+## 🚢 Deploy
+
+El sitio puede ser implementado mediante:
+
+* 🐙 GitHub Pages
+* ☁️ Cloudflare Pages
+* 🌍 Dominio personalizado
+
+---
+
+## 👤 Autor
+
+### **Mo-desto**
+
+Desarrollando identidad digital, diseño web y proyectos escalables.
