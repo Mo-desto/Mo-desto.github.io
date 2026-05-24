@@ -33,7 +33,7 @@ Este repositorio contiene los archivos, recursos y estructura base para el despl
 
 ## 🚢 Deploy
 
-El sitio puede ser implementado mediante:
+El sitio fue implementado mediante:
 
 * 🐙 GitHub Pages
 * ☁️ Cloudflare Pages
