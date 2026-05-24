@@ -1,12 +1,137 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MODEST</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Modest | Portfolio Personal</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h2>Welcome!</h2><
-    <span>Hi, I'm ModestO</span>
+      <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+    <i data-lucide="moon-star" size="18"></i>
+  </button>
+
+  <section class="main-screen" id="inicio">
+  <main class="card">
+    <section class="hero">
+      <h1>M O D E S T</h1>
+      <p class="role">Portfolio Personal · Argentina</p>
+    </section>
+
+    <!--<p class="intro">
+      Desarrollador Full Stack.
+    </p>
+  -->
+
+
+    <nav class="tabs" id="tabs" aria-label="Secciones del portfolio">
+      <span class="tab-indicator" id="tabIndicator"></span>
+      <button class="tab" data-tab="perfil" onclick="toggleTab('perfil', this)">
+        <i data-lucide="user" size="15"></i> Perfil
+      </button>
+      <button class="tab" data-tab="trabajos" onclick="toggleTab('trabajos', this)">
+        <i data-lucide="folder-kanban" size="15"></i> Trabajos
+      </button>
+      <button class="tab" data-tab="skills" onclick="toggleTab('skills', this)">
+        <i data-lucide="code-2" size="15"></i> Skills
+      </button>
+    </nav>
+
+    <section class="panel-wrap" id="panelWrap">
+      <div class="panel-inner">
+        <div class="panel" id="panel"></div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="https://wa.me/5490000000000?text=Hola%20Modest,%20quiero%20contactarte%20por%20un%20proyecto%20web" target="_blank">
+        <i data-lucide="message-circle"></i>
+        Contactarme
+      </a>
+
+      <button class="btn btn-secondary" type="button" onclick="openContactModal()">
+        <i data-lucide="mail"></i>
+        Email
+      </button>
+    </div>
+
+    <div class="brand-line">
+      
+
+      <a class="social-link" href="#" aria-label="Facebook">
+        <i class="fa-brands fa-facebook-f"></i>
+      </a>
+
+      <a class="social-link" href="#" aria-label="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+
+      <a class="social-link" href="#" aria-label="GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+
+      <a class="social-link" href="#" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i>
+      </a>
+
+      <a class="social-link" href="#" aria-label="WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="contactModal" onclick="closeContactModal(event)">
+    <div class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactTitle" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h2 id="contactTitle">Contacto</h2>
+          <p>Completá el formulario para enviar un mensaje directamente desde el portfolio.</p>
+        </div>
+
+        <button class="modal-close" type="button" onclick="closeContactModal()" aria-label="Cerrar modal">
+          <i data-lucide="x" size="18"></i>
+        </button>
+      </div>
+
+      <form class="contact-form" onsubmit="sendContactEmail(event)">
+        <div class="form-group">
+          <label for="contactName">Nombre</label>
+          <input id="contactName" type="text" placeholder="Tu nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contactEmail">Email</label>
+          <input id="contactEmail" type="email" placeholder="tu@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contactMessage">Mensaje</label>
+          <textarea id="contactMessage" placeholder="Hola Modest, quiero consultarte por..." required></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-cancel" type="button" onclick="closeContactModal()">Cancelar</button>
+          <button class="btn btn-send" type="submit">
+            <i data-lucide="send" size="16"></i>
+            Enviar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  </section>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
