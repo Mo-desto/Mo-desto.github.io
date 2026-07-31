@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>MODEST</title>
+<meta name="description" content="Los cálculos de rinde o no rinde se hacen en tu navegador, no se guarda ni se envía ninguna información.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap');
+
+:root{
+  --bg:#F6F5F2;
+  --surface:#FFFFFF;
+  --surface-2:#FBFAF8;
+  --border:#E5E2DA;
+  --ink:#16171B;
+  --ink-soft:#6E6E68;
+  --ink-faint:#9C9B93;
+  --accent:#3452C7;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#EAEEFB;
+  --dark-panel:#1B2036;
+  --dark-panel-ink:#F3F1EA;
+  --positive:#00ec82;
+  --positive-soft:#E7F5EC;
+  --negative:#C43E2B;
+  --negative-soft:#FBEAE6;
+  --shadow:0 1px 2px rgba(20,20,15,0.04), 0 8px 24px -12px rgba(20,20,15,0.10);
+  color-scheme: light;
+}
+
+[data-theme="dark"]{
+  --bg:#111216;
+  --surface:#17181D;
+  --surface-2:#1C1E24;
+  --border:#2A2C33;
+  --ink:#EDEDEA;
+  --ink-soft:#9A9BA3;
+  --ink-faint:#68696F;
+  --accent:#7C93F5;
+  --accent-ink:#0F1220;
+  --accent-soft:#20264A;
+  --dark-panel:#0E1020;
+  --dark-panel-ink:#F3F1EA;
+  --positive:#4FCB8B;
+  --positive-soft:#153228;
+  --negative:#FF8266;
+  --negative-soft:#3A1F1A;
+  --shadow:0 1px 2px rgba(0,0,0,0.3), 0 12px 30px -14px rgba(0,0,0,0.55);
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  transition:background-color .18s ease, color .18s ease;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent-soft); color:var(--ink);}
+
+.page{
+  max-width:1040px;
+  margin:0 auto;
+  padding:48px 24px 80px;
+}
+
+/* ---------- header ---------- */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+  margin-bottom:40px;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:17.5px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin:0 0 10px;
+  font-weight:600;
+}
+h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
+  font-size:clamp(26px,3.4vw,34px);
+  letter-spacing:-0.01em;
+  margin:0 0 8px;
+  color:var(--ink);
+}
+.sub{
+  font-size:14.5px;
+  color:var(--ink-soft);
+  margin:0;
+  max-width:480px;
+  line-height:1.55;
+}
+.icon-btn{
+  flex:0 0 auto;
+  width:40px;height:40px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--ink);
+  font-size:16px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .15s, transform .1s;
+}
+.icon-btn:hover{border-color:var(--accent);}
+.icon-btn:active{transform:scale(0.94);}
+
+/* ---------- layout ---------- */
+.layout{
+  display:grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap:20px;
+  align-items:start;
+}
+@media (max-width: 840px){
+  .layout{grid-template-columns:1fr;}
+}
+
+/* ---------- panels (form) ---------- */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px 22px 24px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow);
+}
+.panel h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  margin:0 0 4px;
+  color:var(--ink);
+}
+.panel .desc{
+  font-size:12.5px;
+  color:var(--ink-faint);
+  margin:0 0 18px;
+  line-height:1.5;
+}
+
+label{
+  display:block;
+  font-size:11.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:6px;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+}
+.field{margin-bottom:14px;}
+.field:last-child{margin-bottom:0;}
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+
+input[type=number], input[type=text]{
+  width:100%;
+  font-family:'IBM Plex Mono',monospace;
+  font-variant-numeric: tabular-nums;
+  font-size:14.5px;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--ink);
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+input[type=text]{font-family:'Inter',sans-serif; font-weight:500;}
+input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
+input::placeholder{color:var(--ink-faint);}
+
+.segmented{
+  display:inline-flex;
+  padding:3px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  margin-bottom:16px;
+}
+.segmented button{
+  font-family:'Inter',sans-serif;
+  font-size:12.5px;
+  font-weight:600;
+  padding:7px 16px;
+  border:none;
+  border-radius:6px;
+  background:transparent;
+  color:var(--ink-soft);
+  cursor:pointer;
+}
+.segmented button.active{
+  background:var(--accent);
+  color:var(--accent-ink);
+}
+
+.cost-row{
+  display:grid;
+  grid-template-columns: 1fr 118px 30px;
+  gap:8px;
+  align-items:center;
+  margin-bottom:9px;
+}
+.remove-btn{
+  width:30px; height:30px;
+  border-radius:7px;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--ink-faint);
+  font-size:15px;
+  line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:color .15s, border-color .15s;
+}
+.remove-btn:hover{color:var(--negative); border-color:var(--negative);}
+
+.add-btn{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  color:var(--accent);
+  background:transparent;
+  border:1px dashed var(--border);
+  border-radius:8px;
+  padding:9px 14px;
+  cursor:pointer;
+  width:100%;
+  margin-top:4px;
+  transition:border-color .15s, background-color .15s;
+}
+.add-btn:hover{border-color:var(--accent); background:var(--accent-soft);}
+
+/* ---------- result column ---------- */
+.col-result{ position:sticky; top:24px; }
+
+.result-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.hero{
+  background:var(--dark-panel);
+  color:var(--dark-panel-ink);
+  padding:24px 22px 22px;
+}
+.hero-label{
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#A9AEC4;
+  margin-bottom:8px;
+}
+.hero-value{
+  display:block;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:38px;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  line-height:1.1;
+}
+.hero-value.pos{color:var(--positive);}
+.hero-value.neg{color:var(--negative);}
+.hero-margin{
+  display:inline-block;
+  margin-top:10px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  font-weight:600;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.08);
+  color:#C9CCDC;
+}
+.hero-margin.pos{color:var(--positive); background:rgba(79,203,139,0.15);}
+.hero-margin.neg{color:var(--negative); background:rgba(255,130,102,0.15);}
+
+.result-body{ padding:8px 22px 20px; }
+.result-section{ padding-top:14px; }
+.result-section + .result-section{
+  margin-top:6px;
+  border-top:1px solid var(--border);
+}
+.section-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--ink-faint);
+  margin:0 0 8px;
+}
+.section-label b{color:var(--ink-soft); font-weight:700;}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:6px 0;
+  font-size:13.5px;
+  color:var(--ink-soft);
+}
+.row span:last-child{
+  font-family:'IBM Plex Mono',monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight:600;
+  color:var(--ink);
+}
+.row.strong span:last-child{ color:var(--accent); }
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+}
+.btn{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  padding:12px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:opacity .15s, transform .1s, background-color .15s;
+}
+.btn:active{transform:scale(0.98);}
+.btn-ghost{
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--ink-soft);
+}
+.btn-ghost:hover{border-color:var(--ink-faint); color:var(--ink);}
+.btn-solid{
+  background:var(--accent);
+  border:1px solid var(--accent);
+  color:#fff;
+}
+.btn-solid:hover{opacity:0.92;}
+
+footer{
+  max-width:1040px;
+  margin:36px auto 36px;
+  padding:0 24px;
+  font-size:11.5px;
+  color:var(--ink-faint);
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      <p class="eyebrow">MODEST INDUMENTARIA</p>
+      <h1>¿Rinde o no rinde?</h1>
+      <p class="sub">Cargá los Metros o Kilogramos a comprar, los costos del taller y el precio de venta. El resultado se actualiza solo.</p>
+    </div>
+    <button type="button" class="icon-btn" id="themeToggle" aria-label="Cambiar tema">
+      <span id="themeIcon"></span>
+    </button>
+  </div>
+
+  <div class="layout">
+    <div class="col-form">
+
+      <div class="panel">
+        <h2>Tela</h2>
+        <p class="desc">Elegí la unidad de compra y cuánto usa esta prenda.</p>
+
+        <div class="segmented" id="unitToggle">
+          <button type="button" data-unit="metro" class="active">Por metro</button>
+          <button type="button" data-unit="kilo">Por kilo</button>
+        </div>
+
+        <div class="field">
+          <label id="labelCostoUnit">Costo por metro ($)</label>
+          <input type="number" id="costoTela" min="0" step="0.01" placeholder="0.00">
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label id="labelCompraUnit">Metros a comprar</label>
+            <input type="number" id="cantCompra" min="0" step="0.01" placeholder="0.00">
+          </div>
+          <div class="field">
+            <label id="labelCantUnit">Metros por prenda</label>
+            <input type="number" id="cantTela" min="0" step="0.01" placeholder="0.00">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Costos adicionales</h2>
+        <p class="desc">Confección, avíos, etiquetas, packaging, envío — lo que sume a esta prenda.</p>
+        <div id="costList"></div>
+        <button type="button" class="add-btn" id="addCost">+ Agregar costo</button>
+      </div>
+
+      <div class="panel">
+        <h2>Venta</h2>
+        <p class="desc">Precio de venta de la prenda. La cantidad manual es opcional, para simular otro volumen.</p>
+        <div class="grid-2">
+          <div class="field">
+            <label>Precio de venta ($)</label>
+            <input type="number" id="precioVenta" min="0" step="0.01" placeholder="0.00">
+          </div>
+          <div class="field">
+            <label>Simular cantidad</label>
+            <input type="number" id="cantPrendas" min="0" step="1" placeholder="—">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="col-result">
+      <div class="result-card">
+        <div class="hero">
+          <span class="hero-label">Ganancia por prenda</span>
+          <span class="hero-value" id="outGanancia">$0,00</span>
+          <span class="hero-margin" id="outMargen">0% margen</span>
+        </div>
+
+        <div class="result-body">
+          <div class="result-section">
+            <div class="row"><span>Costo de tela</span><span id="outTela">$0,00</span></div>
+            <div class="row"><span>Costos adicionales</span><span id="outAdicionales">$0,00</span></div>
+            <div class="row strong"><span>Costo total por prenda</span><span id="outCostoTotal">$0,00</span></div>
+          </div>
+
+          <div class="result-section" id="purchaseSection" hidden>
+            <p class="section-label">Compra de tela</p>
+            <div class="row"><span>Costo total de la compra</span><span id="outCompraTotal">$0,00</span></div>
+            <div class="row"><span>Prendas posibles</span><span id="outPrendasPosibles">—</span></div>
+          </div>
+
+          <div class="result-section" id="loteSection" hidden>
+            <p class="section-label">Lote completo (<b id="ptCant">0</b> prendas)</p>
+            <div class="row"><span>Costo total del lote</span><span id="ptCosto">$0,00</span></div>
+            <div class="row strong"><span>Ganancia total del lote</span><span id="ptGanancia">$0,00</span></div>
+          </div>
+
+          <div class="result-section" id="batchSection" hidden>
+            <p class="section-label">Simulación manual (<b id="batchCant">0</b> prendas)</p>
+            <div class="row"><span>Costo total</span><span id="batchCosto">$0,00</span></div>
+            <div class="row strong"><span>Ganancia total</span><span id="batchGanancia">$0,00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-ghost" id="btnReset">Reiniciar</button>
+        <button type="button" class="btn btn-solid" id="btnPdf">Descargar PDF</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>Los cálculos se hacen en tu navegador, no se guarda ni se envía ninguna información.
+  <div>
+    2026 | modest.com.ar
+  </div>
+  <div style="margin-top:12px;text-align:center;font-size:12px;color:#9a9a9a;">
+    ¿Te sirvió la calculadora?
+    <a href="https://link.mercadopago.com.ar/modestoshop" target="_blank" style="color:#E3B341;font-weight:600;text-decoration:none;">
+        ☕ Invitame un café
+    </a>
+</div>
+</footer>
+
+<script>
+// ---------- Tema claro / oscuro ----------
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+let currentTheme = prefersDark ? 'dark' : 'light';
+
+function applyTheme(t){
+  currentTheme = t;
+  if(t === 'dark'){
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeIcon.innerHTML = '<i data-lucide="sun"></i>';
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    themeIcon.innerHTML = '<i data-lucide="moon"></i>';
+  }
+  lucide.createIcons();
+}
+applyTheme(currentTheme);
+themeToggle.addEventListener('click', () => applyTheme(currentTheme === 'dark' ? 'light' : 'dark'));
+
+// ---------- Unidad tela ----------
+let unit = 'metro';
+const unitToggle = document.getElementById('unitToggle');
+const labelCostoUnit = document.getElementById('labelCostoUnit');
+const labelCantUnit = document.getElementById('labelCantUnit');
+const labelCompraUnit = document.getElementById('labelCompraUnit');
+const costList = document.getElementById('costList');
+const addCostBtn = document.getElementById('addCost');
+
+unitToggle.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  unit = btn.dataset.unit;
+  [...unitToggle.querySelectorAll('button')].forEach(b => b.classList.toggle('active', b === btn));
+  labelCostoUnit.textContent = unit === 'metro' ? 'Costo por metro ($)' : 'Costo por kilo ($)';
+  labelCantUnit.textContent = unit === 'metro' ? 'Metros por prenda' : 'Kilos por prenda';
+  labelCompraUnit.textContent = unit === 'metro' ? 'Metros a comprar' : 'Kilos a comprar';
+  calcular();
+});
+
+function addCostRow(nombre = '', monto = ''){
+  const row = document.createElement('div');
+  row.className = 'cost-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Ej: Confección" class="costNombre" value="${nombre}">
+    <input type="number" placeholder="$ 0.00" min="0" step="0.01" class="costMonto" value="${monto}">
+    <button type="button" class="remove-btn" title="Quitar">&times;</button>
+  `;
+  row.querySelector('.remove-btn').addEventListener('click', () => {
+    row.remove();
+    calcular();
+  });
+  row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcular));
+  costList.appendChild(row);
+}
+
+addCostBtn.addEventListener('click', () => { addCostRow(); calcular(); });
+
+addCostRow('Confección', '');
+addCostRow('Avíos / etiquetas', '');
+
+['costoTela','cantCompra','cantTela','precioVenta','cantPrendas'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calcular);
+});
+
+function fmt(n){
+  return n.toLocaleString('es-AR', {style:'currency', currency:'ARS', minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function calcular(){
+  const costoTela = parseFloat(document.getElementById('costoTela').value) || 0;
+  const cantCompra = parseFloat(document.getElementById('cantCompra').value) || 0;
+  const cantTela = parseFloat(document.getElementById('cantTela').value) || 0;
+  const precioVenta = parseFloat(document.getElementById('precioVenta').value) || 0;
+  const cantPrendas = parseFloat(document.getElementById('cantPrendas').value) || 0;
+
+  const costoCompraTotal = costoTela * cantCompra;
+  const prendasPosibles = cantTela > 0 ? Math.floor(cantCompra / cantTela) : 0;
+  const costoTelaTotal = costoTela * cantTela;
+
+  let adicionales = 0;
+  document.querySelectorAll('.cost-row').forEach(row => {
+    adicionales += parseFloat(row.querySelector('.costMonto').value) || 0;
+  });
+
+  const costoTotal = costoTelaTotal + adicionales;
+  const ganancia = precioVenta - costoTotal;
+  const margen = precioVenta > 0 ? (ganancia / precioVenta) * 100 : 0;
+
+  document.getElementById('outTela').textContent = fmt(costoTelaTotal);
+  document.getElementById('outAdicionales').textContent = fmt(adicionales);
+  document.getElementById('outCostoTotal').textContent = fmt(costoTotal);
+
+  const gananciaEl = document.getElementById('outGanancia');
+  gananciaEl.textContent = fmt(ganancia);
+  gananciaEl.classList.toggle('pos', ganancia >= 0);
+  gananciaEl.classList.toggle('neg', ganancia < 0);
+
+  const margenEl = document.getElementById('outMargen');
+  margenEl.textContent = margen.toFixed(1) + '% margen';
+  margenEl.classList.toggle('pos', margen >= 0);
+  margenEl.classList.toggle('neg', margen < 0);
+
+  const purchaseSection = document.getElementById('purchaseSection');
+  if(cantCompra > 0){
+    purchaseSection.hidden = false;
+    document.getElementById('outCompraTotal').textContent = fmt(costoCompraTotal);
+    document.getElementById('outPrendasPosibles').textContent = cantTela > 0 ? prendasPosibles : '—';
+  } else {
+    purchaseSection.hidden = true;
+  }
+
+  const loteSection = document.getElementById('loteSection');
+  if(prendasPosibles > 0 && cantCompra > 0){
+    loteSection.hidden = false;
+    document.getElementById('ptCant').textContent = prendasPosibles;
+    document.getElementById('ptCosto').textContent = fmt(costoTotal * prendasPosibles);
+    document.getElementById('ptGanancia').textContent = fmt(ganancia * prendasPosibles);
+  } else {
+    loteSection.hidden = true;
+  }
+
+  const batchSection = document.getElementById('batchSection');
+  if(cantPrendas > 0){
+    batchSection.hidden = false;
+    document.getElementById('batchCant').textContent = cantPrendas;
+    document.getElementById('batchCosto').textContent = fmt(costoTotal * cantPrendas);
+    document.getElementById('batchGanancia').textContent = fmt(ganancia * cantPrendas);
+  } else {
+    batchSection.hidden = true;
+  }
+}
+
+calcular();
+
+// ---------- Reiniciar ----------
+document.getElementById('btnReset').addEventListener('click', () => {
+  document.getElementById('costoTela').value = '';
+  document.getElementById('cantCompra').value = '';
+  document.getElementById('cantTela').value = '';
+  document.getElementById('precioVenta').value = '';
+  document.getElementById('cantPrendas').value = '';
+
+  unit = 'metro';
+  [...unitToggle.querySelectorAll('button')].forEach(b => b.classList.toggle('active', b.dataset.unit === 'metro'));
+  labelCostoUnit.textContent = 'Costo por metro ($)';
+  labelCantUnit.textContent = 'Metros por prenda';
+  labelCompraUnit.textContent = 'Metros a comprar';
+
+  costList.innerHTML = '';
+  addCostRow('Confección', '');
+  addCostRow('Avíos / etiquetas', '');
+
+  calcular();
+});
+
+// ---------- Descargar PDF ----------
+document.getElementById('btnPdf').addEventListener('click', () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const margin = 48;
+  let y = margin;
+
+  const unidadLabel = unit === 'metro' ? 'metro' : 'kilo';
+  const costoTela = parseFloat(document.getElementById('costoTela').value) || 0;
+  const cantCompra = parseFloat(document.getElementById('cantCompra').value) || 0;
+  const cantTela = parseFloat(document.getElementById('cantTela').value) || 0;
+  const precioVenta = parseFloat(document.getElementById('precioVenta').value) || 0;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('Ganancia por prenda', margin, y);
+  y += 18;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(120);
+  doc.text('Generado el ' + new Date().toLocaleDateString('es-AR'), margin, y);
+  doc.setTextColor(0);
+  y += 30;
+
+  function sectionTitle(t){
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text(t, margin, y);
+    y += 16;
+    doc.setDrawColor(200);
+    doc.line(margin, y - 10, 547, y - 10);
+  }
+  function line(k, v, bold){
+    doc.setFont('helvetica', bold ? 'bold' : 'normal');
+    doc.setFontSize(11);
+    doc.text(k, margin, y);
+    doc.text(v, 547, y, { align: 'right' });
+    y += 18;
+  }
+
+  sectionTitle('Tela');
+  line('Costo por ' + unidadLabel, fmt(costoTela));
+  line('Cantidad a comprar (' + unidadLabel + 's)', String(cantCompra));
+  line('Uso por prenda (' + unidadLabel + 's)', String(cantTela));
+  y += 8;
+
+  sectionTitle('Costos adicionales');
+  document.querySelectorAll('.cost-row').forEach(row => {
+    const nombre = row.querySelector('.costNombre').value || 'Sin nombre';
+    const monto = parseFloat(row.querySelector('.costMonto').value) || 0;
+    line(nombre, fmt(monto));
+  });
+  y += 8;
+
+  sectionTitle('Resultado por prenda');
+  const costoTelaTotal = costoTela * cantTela;
+  let adicionales = 0;
+  document.querySelectorAll('.cost-row').forEach(row => {
+    adicionales += parseFloat(row.querySelector('.costMonto').value) || 0;
+  });
+  const costoTotal = costoTelaTotal + adicionales;
+  const ganancia = precioVenta - costoTotal;
+  const margen = precioVenta > 0 ? (ganancia / precioVenta) * 100 : 0;
+
+  line('Costo de tela por prenda', fmt(costoTelaTotal));
+  line('Costos adicionales', fmt(adicionales));
+  line('Costo total por prenda', fmt(costoTotal));
+  line('Precio de venta', fmt(precioVenta));
+  line('Ganancia por prenda', fmt(ganancia), true);
+  line('Margen', margen.toFixed(1) + '%', true);
+  y += 8;
+
+  const prendasPosibles = cantTela > 0 ? Math.floor(cantCompra / cantTela) : 0;
+  if(prendasPosibles > 0 && cantCompra > 0){
+    sectionTitle('Total con esta compra');
+    line('Prendas posibles', String(prendasPosibles));
+    line('Costo total del lote', fmt(costoTotal * prendasPosibles));
+    line('Ganancia total del lote', fmt(ganancia * prendasPosibles), true);
+  }
+
+  const cantPrendas = parseFloat(document.getElementById('cantPrendas').value) || 0;
+  if(cantPrendas > 0){
+    sectionTitle('Simulación manual (' + cantPrendas + ' prendas)');
+    line('Costo total', fmt(costoTotal * cantPrendas));
+    line('Ganancia total', fmt(ganancia * cantPrendas), true);
+  }
+
+  doc.save('costo-ganancia-prenda.pdf');
+});
+</script>
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
