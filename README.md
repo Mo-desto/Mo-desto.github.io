@@ -39,6 +39,9 @@ El sitio fue implementado mediante:
 * ☁️ Cloudflare Pages
 * 🌍 Dominio personalizado
 
+Uso de Resend Mail
+  https://resend.com/
+
 ---
 
 ## 👤 Autor
@@ -46,4 +49,3 @@ El sitio fue implementado mediante:
 ### **Mo-desto**
 
 Desarrollando identidad digital, diseño web y proyectos escalables.
-s
