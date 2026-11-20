@@ -872,7 +872,7 @@ legend { margin-bottom: 8px; padding: 0; }
 
 @media (min-width: 400px) {
   .card { padding: 28px; border-radius: var(--brand-radius-card); }
-  h1 { font-size: var(--brand-text-display); letter-spacing: 0.22em; margin-right: -0.22em; }
+  h1 { font-size: var(--brand-text-display); letter-spacing: 0.0em; margin-right: -0.22em; }
   .logomark { width: 52px; height: 52px; }
   .service { grid-template-columns: 36px minmax(0, 1fr) 68px; gap: 10px; }
   .service-ico { width: 36px; height: 36px; }
