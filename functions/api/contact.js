@@ -1,8 +1,28 @@
+const PROJECTS = new Set([
+  "Landing Page",
+  "E-commerce",
+  "Sistema de Turnos",
+  "Web a medida"
+]);
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
   try {
-    const { name, email, message } = await request.json();
+    const body = await request.json();
+    const name = String(body.name || "").replace(/[\r\n]+/g, " ").trim();
+    const email = String(body.email || "").replace(/[\r\n]+/g, "").trim();
+    const message = String(body.message || "").trim();
+    const projectType = String(body.projectType || "").trim();
 
     if (!name || !email || !message) {
       return Response.json(
@@ -10,6 +30,32 @@ export async function onRequestPost(context) {
         { status: 400 }
       );
     }
+
+    if (name.length > 80 || email.length > 120 || message.length > 4000) {
+      return Response.json(
+        { success: false, error: "Datos demasiado largos" },
+        { status: 400 }
+      );
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return Response.json(
+        { success: false, error: "Email inválido" },
+        { status: 400 }
+      );
+    }
+
+    if (projectType && !PROJECTS.has(projectType)) {
+      return Response.json(
+        { success: false, error: "Tipo de proyecto inválido" },
+        { status: 400 }
+      );
+    }
+
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
+    const safeProject = escapeHtml(projectType || "Sin especificar");
 
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -21,13 +67,14 @@ export async function onRequestPost(context) {
         from: "Modest Portfolio <onboarding@resend.dev>",
         to: ["modestw.com@gmail.com"],
         reply_to: email,
-        subject: `Consulta desde portfolio - ${name}`,
+        subject: `Consulta · ${projectType || "Web"} — ${name}`.slice(0, 180),
         html: `
           <h2>Nueva consulta desde modest.com.ar</h2>
-          <p><strong>Nombre:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Nombre:</strong> ${safeName}</p>
+          <p><strong>Email:</strong> ${safeEmail}</p>
+          <p><strong>Proyecto:</strong> ${safeProject}</p>
           <p><strong>Mensaje:</strong></p>
-          <p>${message}</p>
+          <p>${safeMessage}</p>
         `
       })
     });
@@ -40,7 +87,6 @@ export async function onRequestPost(context) {
     }
 
     return Response.json({ success: true });
-
   } catch (error) {
     return Response.json(
       { success: false, error: "Error interno" },
