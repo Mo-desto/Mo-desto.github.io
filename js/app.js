@@ -110,8 +110,8 @@ const views = {
         <p class="panel-text">Piezas reales, de distintos rubros. Cada una resuelve una operación concreta.</p>
       </div>
       <div class="project-list">
-        ${project("Rinde", "Calculadora de costos para indumentaria. El cálculo queda en el navegador.", I.chart, "/rinde/")}
-        ${project("Ciaratex", "Proyecto de indumentaria.", I.shop, "https://ciaratex.modestt.com.ar", true)}
+        ${project("Rinde", "Calculadora de costos para indumentaria.", I.chart, "/rinde/")}
+        ${project("Ciaratex", "Ecommerce Maquineria", I.shop, "https://ciaratex.modestt.com.ar", true)}
         ${project("Celina Tech", "HTML, CSS, JavaScript y SQL.", I.window)}
         ${project("Sistema Conable", "Node, JavaScript y SQL.", I.nodes)}
       </div>
