@@ -14,12 +14,19 @@ Este repositorio contiene los archivos, recursos y estructura base para el despl
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Tecnologías que usamos para tus proyecetos
 
-* 🌍 HTML5
-* 🎨 CSS3
-* ⚡ JavaScript
-
+* HTML5
+* CSS3
+* JavaScript
+* Node
+* Next
+* Tailwinds
+* React
+## Infraestructura Cloud
+* Azure Cloud
+* Google Cloud
+* AWS Cloud
 ---
 
 ## 🎯 Propósito del proyecto

@@ -221,54 +221,37 @@ button, a.btn { touch-action: manipulation; -webkit-tap-highlight-color: transpa
 
 .lockup {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   width: 100%;
 }
 
-.logomark {
-  width: 46px;
-  height: 46px;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  background: transparent;
-  color: var(--text);
-}
-
-.logo-svg { width: 32px; height: 32px; display: block; }
-
-.logo-frame,
-.logo-m {
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-.logo-frame { stroke-width: 1.4; }
-.logo-m { stroke-width: 1.75; }
-
-.logomark.is-draw .logo-frame { animation: logoDraw 0.9s var(--brand-ease-out) both; }
-.logomark.is-draw .logo-m { animation: logoDraw 0.85s var(--brand-ease-out) 0.16s both; }
-
-@keyframes logoDraw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
-}
-
-.word { min-width: 0; }
+.word { min-width: 0; flex: 1; }
 
 h1 {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.18em;
-  margin-right: -0.18em;
-  white-space: nowrap;
+  margin: 0;
+  line-height: 0;
+}
+
+.logo-filters { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.logo-mark {
+  display: block;
+  width: min(220px, 100%);
+  height: auto;
+  aspect-ratio: 466 / 139;
+  object-fit: cover;
+  border: 0;
+  filter: url("#logo-on-light");
+}
+
+html.dark .logo-mark { filter: url("#logo-on-dark"); }
+
+.logo-mark.is-draw { animation: logoReveal 0.85s var(--brand-ease-out) both; }
+
+@keyframes logoReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
 }
 
 .role {
@@ -872,8 +855,7 @@ legend { margin-bottom: 8px; padding: 0; }
 
 @media (min-width: 400px) {
   .card { padding: 28px; border-radius: var(--brand-radius-card); }
-  h1 { font-size: var(--brand-text-display); letter-spacing: 0.0em; margin-right: -0.22em; }
-  .logomark { width: 52px; height: 52px; }
+  .logo-mark { width: min(248px, 100%); }
   .service { grid-template-columns: 36px minmax(0, 1fr) 68px; gap: 10px; }
   .service-ico { width: 36px; height: 36px; }
   .art { width: 68px; height: 46px; }
@@ -887,8 +869,7 @@ legend { margin-bottom: 8px; padding: 0; }
 @media (prefers-reduced-motion: reduce) {
   .card,
   .status-dot::after,
-  .logomark.is-draw .logo-frame,
-  .logomark.is-draw .logo-m,
+  .logo-mark.is-draw,
   .panel.swap-out,
   .swap-in .rise,
   .swap-in .net .draw,
@@ -905,7 +886,5 @@ legend { margin-bottom: 8px; padding: 0; }
   .theme-toggle { transition: none; }
 
   .net .draw,
-  .logo-frame,
-  .logo-m,
   .art .draw { stroke-dashoffset: 0; }
 }

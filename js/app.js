@@ -6,7 +6,6 @@ const indicator = document.getElementById("tabIndicator");
 const panel = document.getElementById("panel");
 const themeToggle = document.getElementById("themeToggle");
 const clock = document.getElementById("clock");
-const logo = document.getElementById("logo");
 const mailCopy = document.getElementById("mailCopy");
 
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -503,13 +502,6 @@ panel.addEventListener("submit", (event) => {
 });
 
 mailCopy.addEventListener("click", copyMail);
-
-logo.addEventListener("mouseenter", () => {
-  if (reduced) return;
-  logo.classList.remove("is-draw");
-  logo.getBoundingClientRect();
-  logo.classList.add("is-draw");
-});
 
 window.addEventListener("resize", () => placeIndicator(true), { passive: true });
 

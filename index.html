@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es_AR">
 <head>
   <meta charset="UTF-8">
-  <meta name="robots" content="noindex"/>
+  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>MODEST | Desarrollo web, landings, tiendas y turnos</title>
   <meta name="description" content="Diseño y desarrollo de landings que convierten, tiendas online y sistemas de turnos para negocios de cualquier rubro. Argentina.">
   <meta name="theme-color" content="#F3F5F8">
   <meta name="author" content="MODEST">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="public/assets/favicon.png" type="image/png">
   <link rel="canonical" href="https://modest.com.ar/">
   <meta property="og:title" content="MODEST | Desarrollo web">
   <meta property="og:description" content="Landings, tiendas online y sistemas de turnos para negocios de cualquier rubro.">
@@ -45,20 +45,42 @@
   </script>
 </head>
 <body>
+  <svg class="logo-filters" aria-hidden="true" focusable="false" width="0" height="0">
+    <filter id="logo-on-light" color-interpolation-filters="sRGB">
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="2.4" intercept="-0.62"/>
+        <feFuncG type="linear" slope="2.4" intercept="-0.62"/>
+        <feFuncB type="linear" slope="2.4" intercept="-0.62"/>
+      </feComponentTransfer>
+      <feColorMatrix type="matrix" values="
+        -1 0 0 0 1
+        0 -1 0 0 1
+        0 0 -1 0 1
+        0.2126 0.7152 0.0722 0 0"/>
+    </filter>
+    <filter id="logo-on-dark" color-interpolation-filters="sRGB">
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="2.4" intercept="-0.62"/>
+        <feFuncG type="linear" slope="2.4" intercept="-0.62"/>
+        <feFuncB type="linear" slope="2.4" intercept="-0.62"/>
+      </feComponentTransfer>
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0.2126 0.7152 0.0722 0 0"/>
+    </filter>
+  </svg>
   <div class="main-screen">
     <div class="stage">
       <div class="tilt" id="tilt">
         <main class="card" id="card">
           <header class="hero">
             <div class="lockup">
-              <div class="logomark is-draw" id="logo">
-                <svg class="logo-svg" viewBox="0 0 32 32" aria-hidden="true">
-                  <rect class="logo-frame" x="2" y="2" width="28" height="28" rx="9" pathLength="1"></rect>
-                  <path class="logo-m" pathLength="1" d="M9.2 23V10.6L16 16.2 22.8 10.6V23"></path>
-                </svg>
-              </div>
               <div class="word">
-                <h1>MODEST</h1>
+                <h1>
+                  <img class="logo-mark is-draw" id="logo" src="img/modesto.jpeg" alt="MODEST">
+                </h1>
                 <p class="role">Desarrollo web</p>
               </div>
               <button class="theme-toggle" id="themeToggle" type="button" aria-label="Usar tema oscuro">
@@ -75,7 +97,7 @@
           <nav class="tabs" id="tabs" aria-label="Secciones">
             <span class="tab-indicator" id="tabIndicator" aria-hidden="true"></span>
             <button class="tab active" id="tab-inicio" type="button" data-tab="inicio" aria-controls="panel" aria-selected="true">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 16.5V9.2L12 12.5 16 9.2v7.3"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18.5V7.2h2.6L12 14.2l4.4-7H19v11.3"/></svg>
               <span class="tab-label">Inicio</span>
             </button>
             <button class="tab" id="tab-servicios" type="button" data-tab="servicios" aria-controls="panel" aria-selected="false">
