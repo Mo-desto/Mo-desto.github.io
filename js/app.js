@@ -70,7 +70,7 @@ const views = {
     return `
       <div class="rise lead">
         <h2 class="panel-title">Servicios</h2>
-        <p class="panel-text">Cuatro formas de trabajar, según lo que tu negocio necesita ahora.</p>
+        <p class="panel-text">Según lo que tu negocio necesita ahora.</p>
       </div>
       ${service("Landing pages", "Una página con un solo objetivo: que te escriban, reserven o compren. Mensaje claro, carga rápida y una acción principal.", I.landing, artLanding)}
       ${service("E-commerce", "Catálogo y checkout con la lógica de tu negocio. Una tienda que se siente propia, no una plantilla genérica.", I.shop, artShop)}
