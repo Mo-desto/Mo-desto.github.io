@@ -142,7 +142,7 @@ button, a.btn { touch-action: manipulation; -webkit-tap-highlight-color: transpa
 }
 
 .stage {
-  width: min(100%, 460px);
+  width: min(90%, 460px);
   perspective: 980px;
 }
 
